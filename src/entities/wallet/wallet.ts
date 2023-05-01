@@ -1,0 +1,22 @@
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne, JoinColumn } from 'typeorm';
+import { Base } from '../base-entity/base-entity';
+import { User } from '../user/user';
+import { WalletToken } from '../wallet-token/wallet-token';
+
+@Entity()
+export class Wallet extends Base {
+  @OneToOne(() => User)
+  @JoinColumn({ name: 'user_id' })
+  user: User;
+
+  @Column()
+  name: string;
+
+  @Column()
+  moneyAmount: number;
+
+  @OneToMany(() => WalletToken, (walletToken) => walletToken.wallet, {
+    eager: true,
+  })
+  walletTokens: WalletToken[];
+}
