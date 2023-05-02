@@ -1,9 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Transaction } from '../transaction/transaction';
+import { TokenService } from '../token/token.service';
 import { CreateWalletDto } from '../wallet/create-wallet.dto';
-import { Wallet } from '../wallet/wallet';
 import { WalletService } from '../wallet/wallet.service';
 import { CreateUserDto } from './create-user.dto';
 import { User } from './user';
@@ -13,8 +12,10 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
-    @InjectRepository(Wallet)
+    @Inject(forwardRef(() => WalletService))
     private walletService: WalletService,
+    @Inject(forwardRef(() => TokenService))
+    private tokenService: TokenService,
   ) {}
 
   async getUserById(id: string): Promise<User> {
@@ -25,23 +26,22 @@ export class UsersService {
     try {
       const user = new User();
       user.name = createUserDto.name;
-      user.lastName = createUserDto.lastName
+      user.lastName = createUserDto.lastName;
       user.email = createUserDto.email;
       user.password = createUserDto.password;
       user.tokenName = createUserDto.tokenName;
 
       // creamos una nueva billetera para el usuario
-/*       const wallet = new CreateWalletDto();
+      const wallet = new CreateWalletDto();
       wallet.moneyAmount = parseInt(process.env.DEFAULT_MONEY_AMOUNT) || 1000;
-      wallet.name = 'Default wallet' */
+      wallet.name = 'Default wallet';
 
       // guardamos el usuario y la billetera
       const savedUser = await this.userRepository.save(user);
-/*       wallet.user = savedUser;
+      wallet.user = savedUser;
       await this.walletService.create(wallet);
 
-      console.log(wallet) */
-      
+      await this.tokenService.create(savedUser);
       return savedUser;
     } catch (e) {
       console.debug(e);

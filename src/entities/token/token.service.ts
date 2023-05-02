@@ -22,8 +22,7 @@ export class TokenService {
         parseInt(process.env.DEFAULT_TOKEN_QUANTITY) || 100;
 
       const savedToken = await this.tokenRepository.create(newToken);
-      console.log(newToken, 'gola');
-      return await this.tokenRepository.save(newToken);
+      return await this.tokenRepository.save(savedToken);
     } catch (e) {
       console.log(e);
     }

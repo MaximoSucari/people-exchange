@@ -24,8 +24,8 @@ export class WalletService {
     wallet.user = createWalletDto.user;
     if (user) wallet.user = user;
     wallet.name = createWalletDto.name; // establecemos el userId en la billetera
-    console.log(wallet);
-    return await this.walletRepository.save(wallet);
+    const newWallet = await this.walletRepository.create(wallet);
+    return await this.walletRepository.save(newWallet);
   }
 
   async findAll(): Promise<Wallet[]> {
