@@ -18,7 +18,7 @@ export class WalletService {
     const wallet = new Wallet();
     wallet.moneyAmount = createWalletDto.moneyAmount;
     const user = await this.userRepository.findOne({
-      where: { id: createWalletDto.userId },
+      where: { id: createWalletDto.user.id },
     });
 
     wallet.user = createWalletDto.user;

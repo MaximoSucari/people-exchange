@@ -39,9 +39,15 @@ export class UsersService {
       // guardamos el usuario y la billetera
       const savedUser = await this.userRepository.save(user);
       wallet.user = savedUser;
-      await this.walletService.create(wallet);
+      const savedWallet = await this.walletService.create(wallet);
 
-      await this.tokenService.create(savedUser);
+      const savedToken = await this.tokenService.create(savedUser);
+
+      await this.tokenService.initialMint(
+        savedToken,
+        savedWallet,
+        parseInt(process.env.DEFAULT_TOKEN_AMOUNT) || 100,
+      );
       return savedUser;
     } catch (e) {
       console.debug(e);

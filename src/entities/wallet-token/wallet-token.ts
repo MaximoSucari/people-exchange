@@ -1,4 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 import { Token } from '../token/token';
 import { Wallet } from '../wallet/wallet';
 
@@ -11,8 +17,10 @@ export class WalletToken {
   amount: number;
 
   @ManyToOne(() => Wallet, (wallet) => wallet.walletTokens)
+  @JoinColumn({ name: 'wallet_id' })
   wallet: Wallet;
 
   @ManyToOne(() => Token, (token) => token.walletTokens)
+  @JoinColumn({ name: 'token_id' })
   token: Token;
 }

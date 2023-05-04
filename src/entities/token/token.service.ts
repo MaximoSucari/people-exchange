@@ -1,15 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { Token } from './token';
-import { CreateTokenDto } from './create-token.dto';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user/user';
+import { WalletTokenService } from '../wallet-token/wallet-token.service';
+import { CreateWalletTokenDto } from '../wallet-token/create-wallet-token.dto';
+import { Wallet } from '../wallet/wallet';
+import { WalletToken } from '../wallet-token/wallet-token';
 
 @Injectable()
 export class TokenService {
   constructor(
     @InjectRepository(Token)
     private tokenRepository: Repository<Token>,
+    @Inject(forwardRef(() => WalletTokenService))
+    private walletTokenService: WalletTokenService,
   ) {}
 
   async create(user: User): Promise<Token> {
@@ -23,6 +28,28 @@ export class TokenService {
 
       const savedToken = await this.tokenRepository.create(newToken);
       return await this.tokenRepository.save(savedToken);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  async initialMint(
+    token: Token,
+    userWallet: Wallet,
+    amount: number,
+  ): Promise<WalletToken> {
+    try {
+      const newWalletToken = new CreateWalletTokenDto();
+
+      newWalletToken.token = token;
+      newWalletToken.wallet = userWallet;
+      newWalletToken.amount = amount;
+
+      const savedWalletToken = await this.walletTokenService.create(
+        newWalletToken,
+      );
+
+      return savedWalletToken;
     } catch (e) {
       console.log(e);
     }

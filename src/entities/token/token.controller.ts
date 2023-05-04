@@ -8,7 +8,12 @@ export class TokensController {
 
   @Post()
   async create(@Body() user: User) {
-    console.log(user)
+    console.log(user);
+    return await this.tokenService.create(user);
+  }
+
+  @Post()
+  async initialMint(@Body() user: User) {
     return await this.tokenService.create(user);
   }
 

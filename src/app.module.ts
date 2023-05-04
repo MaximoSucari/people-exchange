@@ -12,6 +12,8 @@ import { User } from './entities/user/user';
 import { UsersController } from './entities/user/user.controller';
 import { UsersService } from './entities/user/user.service';
 import { WalletToken } from './entities/wallet-token/wallet-token';
+import { WalletTokenController } from './entities/wallet-token/wallet-token.controller';
+import { WalletTokenService } from './entities/wallet-token/wallet-token.service';
 import { Wallet } from './entities/wallet/wallet';
 import { WalletController } from './entities/wallet/wallet.controller';
 import { WalletService } from './entities/wallet/wallet.service';
@@ -31,7 +33,7 @@ import { WalletService } from './entities/wallet/wallet.service';
     }),
     TypeOrmModule.forFeature([User, Token, Wallet, Transaction, Order, WalletToken])
   ],
-  controllers: [AppController, UsersController, TokensController, WalletController],
-  providers: [AppService, UsersService, TokenService, WalletService],
+  controllers: [AppController, UsersController, TokensController, WalletController, WalletTokenController],
+  providers: [AppService, UsersService, TokenService, WalletService, WalletTokenService],
 })
 export class AppModule {}
