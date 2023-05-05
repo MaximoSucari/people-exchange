@@ -5,14 +5,13 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
+import { Base } from '../base-entity/base-entity';
 import { Token } from '../token/token';
 import { Wallet } from '../wallet/wallet';
 
 @Entity()
-export class WalletToken {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class WalletToken extends Base {
+  
   @Column()
   amount: number;
 

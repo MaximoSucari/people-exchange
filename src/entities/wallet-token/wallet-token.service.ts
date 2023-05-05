@@ -26,26 +26,30 @@ export class WalletTokenService {
     return this.walletTokenRepository.find();
   }
 
-  async findOne(id: number): Promise<WalletToken> {
+  async findOne(id: string): Promise<WalletToken> {
     return this.walletTokenRepository.findOne({ where: { id } });
   }
 
   async findByWalletId(walletId: string): Promise<any> {
-    console.log('ta');
-    const walletTokens = await this.walletTokenRepository.find({
-      where: {
-        wallet: {
-          id: walletId,
+    try {
+      const walletTokens = await this.walletTokenRepository.find({
+        where: {
+          wallet: {
+            id: walletId,
+          },
         },
-      },
-    });
-    console.log(walletTokens);
+        relations: ['token'],
+      });
 
-    return walletTokens;
+      return walletTokens;
+    } catch (e) {
+      console.log(e);
+      return e;
+    }
   }
 
   async update(
-    id: number,
+    id: string,
     updateWalletTokenDto: CreateWalletTokenDto,
   ): Promise<WalletToken> {
     const walletToken = await this.walletTokenRepository.findOne({

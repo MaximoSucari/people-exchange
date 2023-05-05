@@ -24,11 +24,13 @@ export class WalletTokenController {
 
   @Get(':id')
   findOne(@Param('id') id: string): Promise<WalletToken> {
-    return this.walletTokenService.findOne(+id);
+    return this.walletTokenService.findOne(id);
   }
 
-  @Get(':walletId')
-  findByWalletId(@Param(':walletId') walletId: string): Promise<WalletToken[]> {
+  @Get(':walletId/tokens')
+  async getWalletTokens(
+    @Param('walletId') walletId: string,
+  ): Promise<WalletToken[]> {
     return this.walletTokenService.findByWalletId(walletId);
   }
 
@@ -37,7 +39,7 @@ export class WalletTokenController {
     @Param('id') id: string,
     @Body() updateWalletTokenDto: CreateWalletTokenDto,
   ): Promise<WalletToken> {
-    return this.walletTokenService.update(+id, updateWalletTokenDto);
+    return this.walletTokenService.update(id, updateWalletTokenDto);
   }
 
   @Delete(':id')

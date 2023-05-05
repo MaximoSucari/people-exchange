@@ -1,7 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../user/user';
+import { WalletToken } from '../wallet-token/wallet-token';
+import { WalletTokenService } from '../wallet-token/wallet-token.service';
 import { CreateWalletDto } from './create-wallet.dto';
 import { Wallet } from './wallet';
 
@@ -12,6 +14,8 @@ export class WalletService {
     private walletRepository: Repository<Wallet>,
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    @Inject(forwardRef(() => WalletTokenService))
+    private walletTokenService: WalletTokenService,
   ) {}
 
   async create(createWalletDto: CreateWalletDto): Promise<Wallet> {
@@ -28,6 +32,14 @@ export class WalletService {
     return await this.walletRepository.save(newWallet);
   }
 
+  async getTokensByWalletId(walletId: string): Promise<WalletToken[]> {
+    try {
+      return await this.walletTokenService.findByWalletId(walletId);
+    } catch (e) {
+      console.log(e);
+      return e;
+    }
+  }
   async findAll(): Promise<Wallet[]> {
     return this.walletRepository.find();
   }

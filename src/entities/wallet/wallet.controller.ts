@@ -1,8 +1,9 @@
 import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { WalletService } from './wallet.service';
 import { CreateWalletDto } from './create-wallet.dto';
+import { WalletToken } from '../wallet-token/wallet-token';
 
-@Controller('wallets')
+@Controller('wallet')
 export class WalletController {
   constructor(private readonly walletService: WalletService) {}
 
@@ -16,4 +17,10 @@ export class WalletController {
   findOne(@Param('id') id: string) {
     return this.walletService.findOne(id);
   }
+
+  @Get(':walletId/tokens')
+  async getWalletTokens(@Param('walletId') walletId: string): Promise<WalletToken[]> {
+    return this.walletService.getTokensByWalletId(walletId);
+  }
+  
 }
