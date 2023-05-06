@@ -8,8 +8,13 @@ export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
   @Post()
-  create(@Body() createOrderDto: CreateOrderDto): Promise<Order> {
-    return this.orderService.createOrder(createOrderDto);
+  async create(@Body() createOrderDto: CreateOrderDto): Promise<Order> {
+    try {
+      return await this.orderService.createOrder(createOrderDto);
+    } catch (e) {
+      console.log(e);
+      return e;
+    }
   }
 
   @Get()

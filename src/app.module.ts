@@ -4,6 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { Order } from './entities/order/order';
+import { OrderController } from './entities/order/order.controller';
+import { OrderService } from './entities/order/order.service';
 import { Token } from './entities/token/token';
 import { TokensController } from './entities/token/token.controller';
 import { TokenService } from './entities/token/token.service';
@@ -33,7 +35,7 @@ import { WalletService } from './entities/wallet/wallet.service';
     }),
     TypeOrmModule.forFeature([User, Token, Wallet, Transaction, Order, WalletToken])
   ],
-  controllers: [AppController, UsersController, TokensController, WalletController, WalletTokenController],
-  providers: [AppService, UsersService, TokenService, WalletService, WalletTokenService],
+  controllers: [AppController, UsersController, TokensController, WalletController, WalletTokenController, OrderController],
+  providers: [AppService, UsersService, TokenService, WalletService, WalletTokenService, OrderService],
 })
 export class AppModule {}

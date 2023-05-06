@@ -1,6 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Token } from '../token/token';
+import { User } from '../user/user';
 import { CreateOrderDto } from './create-order.dto';
 import { Order } from './order';
 
@@ -9,15 +11,28 @@ export class OrderService {
   constructor(
     @InjectRepository(Order)
     private readonly orderRepository: Repository<Order>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+    @InjectRepository(Token)
+    private readonly tokenRepository: Repository<Token>,
   ) {}
 
   async createOrder(createOrderDto: CreateOrderDto): Promise<Order> {
     const order = new Order();
-    order.token = createOrderDto.token; // Aca seguro hay que hacer un GET al TokenRepository para traer el object completo
+    const user = await this.userRepository.findOne({
+      where: { id: createOrderDto.userId },
+    });
+    const token = await this.tokenRepository.findOne({
+      where: { id: createOrderDto.tokenId },
+    });
+
+    order.user = user;
+    order.token = token; // Aca seguro hay que hacer un GET al TokenRepository para traer el object completo
     order.price = createOrderDto.price;
     order.amount = createOrderDto.amount;
     order.type = createOrderDto.type;
-    order.user = createOrderDto.user;
+
+    console.log(order);
 
     return this.orderRepository.save(order);
   }

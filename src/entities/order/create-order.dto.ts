@@ -1,6 +1,4 @@
-import { IsEnum, IsNotEmpty, IsNumber, IsPositive } from 'class-validator';
-import { Token } from '../token/token';
-import { User } from '../user/user';
+import { IsEnum, IsNumber, IsPositive, IsUUID } from 'class-validator';
 
 export class CreateOrderDto {
   @IsNumber()
@@ -11,11 +9,11 @@ export class CreateOrderDto {
   @IsPositive()
   amount: number;
 
-  @IsNotEmpty()
-  token: Token;
+  @IsUUID()
+  tokenId: string;
 
-  @IsNotEmpty()
-  user: User;
+  @IsUUID()
+  userId: string;
 
   @IsEnum(['buy', 'sell'])
   type: 'buy' | 'sell';
