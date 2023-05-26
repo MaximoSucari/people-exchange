@@ -37,8 +37,35 @@ export class OrderService {
     return this.orderRepository.save(order);
   }
 
-  async getAllOrdersByTokenId(id: string): Promise<Order[]> {
-    return this.orderRepository.find({ where: { token: { id } } });
+  async confirmOrderById(orderId: string, userId: string): Promise<Order[]> {
+    try {
+      const order = await this.orderRepository.find({ where: { id: orderId } });
+
+      // CREATE TRANSACTION
+
+      // UPDATE WALLET TOKENS AND WALLET AMOUNTS
+
+      // UPDATE ORDER STATUS --> TODO: ORDER STATUS FIELD
+
+      // RETURN ORDER
+      return;
+    } catch (e) {
+      console.log(e);
+      return e;
+    }
+  }
+
+  async getAllOrdersByTokenId(tokenId: string): Promise<Order[]> {
+    try {
+      return await this.orderRepository.find({
+        relations: ['token'],
+        loadRelationIds: true,
+        where: { token: { id: tokenId } },
+      });
+    } catch (e) {
+      console.log(e);
+      return e;
+    }
   }
 
   async getAllBuyOrdersByTokenId(id: string): Promise<Order[]> {

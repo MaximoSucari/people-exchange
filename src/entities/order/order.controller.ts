@@ -22,7 +22,7 @@ export class OrderController {
     return this.orderService.getAllOrders();
   }
 
-  @Get(':id')
+  @Get('/id/:id')
   getOrderById(@Param('id') id: string): Promise<Order> {
     return this.orderService.getOrderById(id);
   }
@@ -30,6 +30,11 @@ export class OrderController {
   @Get('user/:userId')
   getOrderByUserId(@Param('userId') userId: string): Promise<Order[]> {
     return this.orderService.getOrderByUserId(userId);
+  }
+
+  @Post('/:orderId')
+  confirmOrderById(@Param('orderId') orderId: string, userId: string): Promise<Order[]> {
+    return this.orderService.confirmOrderById(orderId, userId);
   }
 
   @Get('buy')
@@ -42,9 +47,9 @@ export class OrderController {
     return this.orderService.getAllSellOrders();
   }
 
-  @Get('token')
-  getOrdersByTokenId(): Promise<Order[]> {
-    return this.orderService.getAllSellOrders();
+  @Get('token/:tokenId')
+  getOrdersByTokenId(@Param('tokenId') tokenId: string): Promise<Order[]> {
+    return this.orderService.getAllOrdersByTokenId(tokenId);
   }
 
   @Get('token/buy')
